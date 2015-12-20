@@ -12,7 +12,6 @@ future==0.14.3
 gunicorn==19.3.0
 httplib2==0.8
 numpy==1.9.2
-PIL==1.1.7
 Pillow==3.0.0
 PyAudio==0.2.8
 PyGreSQL==4.1
