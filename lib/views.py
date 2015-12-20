@@ -26,52 +26,56 @@ def route_display():
 
 class HelloView(FlaskView):
     def __init__(self):
-        self.PIKA = HI(10)
+        pass
 
-    @route('/init', methods=['GET','POST'])
-    def save(self):
+    @route('/image', methods=['GET','POST'])
+    def image_save(self):
 
-        string_text = request.POST['query']
-        f = open('ted_script2.txt', 'w')
-        f.write(string_text)
-        f.close()
-        string_text = string_text.lower()
+        image_index = json.loads(request.form['image'])
 
-        tokens = nltk.word_tokenize(string_text)
+        print image_index
 
-        stop_sig = ["(",")","-","[","]","{","}",";",":",
-                    "\\","<",">","/","@","#","$","%","^","&","*","_","~","..","...","`","``"]
+        temp_array = col1.find({"index":image_index})
 
-        begin_end_sig = [".", ",", "!", "?"]
+        for t in temp_array:
+            image_url = t['photo_file_url']
 
-        morphied_tokens = []
 
-        for token in tokens:
-            if wn.morphy(token) != None and wn.morphy(token) != "be":
-                morphied_tokens.append(wn.morphy(token))
-            else:
-                morphied_tokens.append(token)
+        print image_url
 
-        bigram_array = list(nltk.bigrams(tokens))
-        print(bigram_array)
-        print(tokens)
-        j = 0
-        for i in range(len(bigram_array)):
-            #print(bigram_array[i][0],bigram_array[i][1])
-            if bigram_array[i-j][0] in stop_sig or bigram_array[i-j][1] in stop_sig:
-                #print("ni",tokens[i])
-                bigram_array.pop(i-j)
-                tokens.pop(i-j)
-                j += 1
+        image = io.BytesIO(urllib.urlopen(image_url).read())
+        print image
+        image = Image.open(image)
+        print image
+        image = image.resize((100,100), Image.ANTIALIAS)
+        print image
 
-        print(bigram_array)
-        print(tokens)
+        image.save ( 'lib/static/image/' + str(image_index) + '.jpg' , 'JPEG')
 
-        pos = nltk.pos_tag(tokens)
+        return "hi"
 
-        print("morphias", tokens[0], wn.synsets(tokens[0]))
+    @route('/data', methods=['GET','POST'])
+    def get_data(self):
 
-        print(pos)
+        x = json.loads(request.form['query_num']) - 1
+
+        temp_array = []
+
+        for i in range(10):
+            temp_array.append(col1.find({"index":10*x+i+1}))
+
+        array = []
+
+        for count,t in enumerate(temp_array):
+            array.append([])
+            for a in t:
+                del a['_id']
+                array[count].append(a)
+
+
+        print temp_array
+
+        return json.dumps(array)
 
 
     @route('/hoge', methods=['GET','POST'])
@@ -79,31 +83,23 @@ class HelloView(FlaskView):
 
         x = json.loads(request.form['query'])
 
-        col1.update({'photo_file_url':x[0]['photo_file_url']},x[0],upsert=True)
+        for i in range(len(x)):
 
-        image = urllib.urlopen(x[0]['photo_file_url'])
+            a = col1.count() + 1
+            x[i]['index'] = a
+
+            col1.update({'photo_file_url':x[i]['photo_file_url']},x[i],upsert=True)
+            #if i > 10:
+            #    break
+
+        #image = urllib.urlopen(x[0]['photo_file_url'])
         #image_64 = base64.encodestring(image.read())
-        temp = io.BytesIO(image.read())
-        print np.array(Image.open(temp))
 
-        #col1.insert(x[0])
-        #print x[0]
+        #temp = io.BytesIO(image.read())
+
+        #print np.array(Image.open(temp))
+
         return "hello world"
-
-class HI:
-  xx = 5
-  def __init__(self,x=3):
-    print ("hi")
-    self.x = x
-    print (self.x)
-    #print (xx)
-
-
-  def kimi(self):
-    self.x += 2
-    self.xx += 2
-    print(HI().xx)
-    print(self.x)
 
 
 HelloView.register(app)

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <meta charset="utf-8" />
     <title>Geolocation API x Google Map</title>
     <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -15,6 +17,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="../js/panoramio.js"></script>
     <style>
+
         * {
             margin:0; padding:0;
         }
@@ -37,7 +40,7 @@
         }
         #infowin div.inner {
             text-align:center;
-            background:url("fox2.jpg") no-repeat center 40%;
+            background:url("../image/fox2.jpg") no-repeat center 40%;
         }
         #license {
             margin:0; padding:0;
@@ -97,26 +100,22 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="../html/image_search.html">Image Search</a></li>
-                <li><a href="../html/threed.html">three D</a></li>
+                <li><a href="/">Home</a></li>
+                <li class="active"><a href="../html/map3.html">Image Retrieval</a></li>
+                <li><a href="../html/table.html">Table</a></li>
+                <!--<li><a href="../html/threed.html">three D</a></li>-->
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown1 <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Download<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="javascript:download()">Download</a></li>
-                        <li><a href="javascript:gray(1)">Saturation</a></li>
-                        <li><a href="javascript:gray(2)">Intensity</a></li>
+
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown2 <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="javascript:sobel()">Sobel</a></li>
-                        <li><a href="javascript:sobel()">Gaussian</a></li>
-                        <li><a href="javascript:sobel()">none</a></li>
-                    </ul>
+                <li><a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Configuration</a>
                 </li>
             </ul>
+
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/">Default</a></li>
                 <li><a href="/">Static top</a></li>
@@ -125,8 +124,32 @@
         </div>
     </div>
 </nav>
+
 <h1>Image Retrieval</h1>
-<button>Download</button>
+<div class="collapse" id="collapseExample">
+    <hr>
+    <span>
+
+    <div class="col-xs-2">
+        <label >Picture Num</label>
+        <input type="text" id="picture_num" class="form-control" placeholder="100">
+        <label ></label>
+    </div>
+    <div class="col-xs-2">
+        <label >Radius(East-West)</label>
+        <input type="text" id="radius-east-west" class="form-control" placeholder="1(km)">
+        <label ></label>
+    </div>
+    <div class="col-xs-2">
+        <label >Radius(North-South)</label>
+        <input type="text" id="radius-north-south" class="form-control" placeholder="1(km)">
+        <label ></label>
+    </div>
+        <button type="button" class="btn btn-default" onclick="change()">CHANGE</button>
+    </span>
+
+</div>
+
 <p id="support"></p>
 <p id="errmsg"></p>
 <div id="map"></div>
